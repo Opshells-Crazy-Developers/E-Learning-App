@@ -27,9 +27,10 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
     { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Subscriptions', path: '/subscriptions' },
     { name: 'Contact', path: '/contact' },
   ];
-
+  
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">

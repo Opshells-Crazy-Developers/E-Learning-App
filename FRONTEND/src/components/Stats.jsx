@@ -26,7 +26,7 @@ const Stats = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          Why Learnity?
+          Why <span className='text-3xl font-bold mb-12 text-purple-600'>Learnity</span> ?
         </motion.h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

@@ -67,7 +67,7 @@ export const allCourses = [
     category: "Programming",
     duration: "6 hours",
     level: "Beginner",
-    price: 0,
+    price: 999,
     originalPrice: 1499,
     rating: 4.8,
     ratingCount: 5200,

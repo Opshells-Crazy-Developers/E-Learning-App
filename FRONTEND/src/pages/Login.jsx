@@ -45,35 +45,47 @@ const Login = () => {
           </form>
         </div>
 
-        {/* Sign In Form */}
-        <div
-          className={`absolute top-0 h-full w-1/2 transition-all duration-700 bg-white ${
-            isRightPanelActive ? 'translate-x-full opacity-0 z-10' : 'opacity-100 z-20'
-          }`}
-        >
-          <form className="h-full flex flex-col justify-center items-center px-10 space-y-4">
-            <h1 className="text-3xl font-bold text-purple-700">Sign In</h1>
-            <input
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              type="email"
-              placeholder="Email"
-            />
-            <input
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              type="password"
-              placeholder="Password"
-            />
-            <a href="#" className="text-sm text-purple-600 hover:underline">
-              Forgot password?
-            </a>
-            <button
-              type="submit"
-              className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
-            >
-              Sign In
-            </button>
-          </form>
-        </div>
+       {/* Sign In Form */}
+<div
+  className={`absolute top-0 h-full w-1/2 transition-all duration-700 bg-white ${
+    isRightPanelActive ? 'translate-x-full opacity-0 z-10' : 'opacity-100 z-20'
+  }`}
+>
+  <form className="h-full flex flex-col justify-center items-center px-10 space-y-4">
+    <h1 className="text-3xl font-bold text-purple-700">Sign In</h1>
+    <input
+      className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+      type="email"
+      placeholder="Email"
+    />
+    <input
+      className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+      type="password"
+      placeholder="Password"
+    />
+    <a href="#" className="text-sm text-purple-600 hover:underline">
+      Forgot password?
+    </a>
+    <button
+      type="submit"
+      className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
+    >
+      Sign In
+    </button>
+
+    {/* ✅ New line added here */}
+    <p className="text-sm text-gray-600">
+      Don&apos;t have an account?{' '}
+      <button
+        type="button"
+        onClick={handleSignUpClick}
+        className="text-purple-700 font-semibold hover:underline"
+      >
+        Sign Up
+      </button>
+    </p>
+  </form>
+</div>
 
         {/* Overlay */}
         <div

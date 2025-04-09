@@ -4,6 +4,7 @@ import Testimonials from '../components/Testimonials';
 import HeroSection from '../components/Hero';
 import FeaturedCourses from '../components/FeaturedCourses';
 import CourseCategories from '../components/CourseCategories';
+import SubscriptionPlans from '../components/Subscriptions';
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <HeroSection/>
       <FeaturedCourses />
       <CourseCategories/>
+      <SubscriptionPlans/>
       <Stats />
       <Testimonials />
     </div>

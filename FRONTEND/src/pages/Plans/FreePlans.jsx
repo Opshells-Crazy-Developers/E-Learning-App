@@ -1,35 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { CheckCircle } from 'lucide-react';
 import ComparePlans from '../../components/ComparePlans';
-import Testimonials from '../../components/Testimonials';
+import SubsTestimonials from '../../components/SubsTestimonials';
 
 const Free = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold text-center text-purple-700 mb-6">Free Plan</h2>
-      <p className="text-center text-gray-700 max-w-xl mx-auto mb-10">
-        Get started with our Free Plan – explore a selection of courses and become part of our learning community.
-      </p>
+    <div className="px-4 py-12 bg-gray-50 min-h-screen">
+      {/* Main Card */}
+      <div className="max-w-md mx-auto rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white border border-gray-200">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
+          <h1 className="text-2xl font-bold text-center mb-1">Free Plan</h1>
+          <p className="text-sm text-center opacity-90">
+            Begin your journey with access to selected courses and community.
+          </p>
+        </div>
 
-      <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm mb-12">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">What’s Included</h3>
-        <ul className="list-disc list-inside space-y-2 text-sm text-gray-700">
-          <li>Access to selected free courses</li>
-          <li>Basic community support</li>
-          <li>Limited learning resources</li>
-          <li>No certification</li>
-        </ul>
+        {/* Features */}
+        <div className="p-6 space-y-4">
+          <h3 className="text-base font-semibold text-gray-800">What You’ll Get:</h3>
+          <ul className="space-y-3 text-sm text-gray-700">
+            {[
+              'Access to selected free courses',
+              'Basic community support',
+              'Limited learning resources',
+              'No certification included',
+            ].map((item, index) => (
+              <li key={index} className="flex items-center gap-2">
+                <CheckCircle size={18} className="text-green-500" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA */}
+          <Link
+            to="/"
+            className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 rounded-lg transition duration-300 mt-6"
+          >
+            Start Free
+          </Link>
+        </div>
       </div>
 
-      <ComparePlans />
-      <Testimonials />
+      {/* Comparison Section */}
+      <div className="max-w-5xl mx-auto mt-16">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Compare Plans</h3>
+        <ComparePlans />
+      </div>
 
-      <Link
-        to="/subscriptions"
-        className="inline-block mt-12 text-purple-600 hover:underline text-sm text-center w-full"
-      >
-        ← Back to Subscription Plans
-      </Link>
+      {/* Testimonials */}
+      <div className="max-w-5xl mx-auto mt-20">
+        <SubsTestimonials />
+      </div>
+
+      {/* Back CTA */}
+      <div className="text-center mt-16">
+        <Link
+          to="/subscriptions"
+          className="inline-block text-purple-600 hover:underline font-medium text-sm"
+        >
+          ← Back to Subscription Plans
+        </Link>
+      </div>
     </div>
   );
 };

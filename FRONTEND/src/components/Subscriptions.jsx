@@ -39,7 +39,7 @@ const SubscriptionPlans = () => {
     <div className="max-w-6xl mx-auto px-6 py-12">
       <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">Choose Your Plan</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 cursor-pointer">
         {plans.map((plan, index) => (
           <div
             key={index}
@@ -69,9 +69,9 @@ const SubscriptionPlans = () => {
             </div>
 
             {/* Navigation Button */}
-            <Link to={plan.link} className="w-full">
+            <Link to={plan.link} className="w-full ">
               <button
-                className={`w-full py-2 rounded-full font-semibold text-sm transition duration-300 ${
+                className={`w-full py-2 rounded-full font-semibold text-sm transition duration-300 cursor-pointer ${
                   plan.title === 'Free'
                     ? 'border border-purple-400 text-purple-600 hover:bg-purple-50'
                     : plan.title === 'Pro'

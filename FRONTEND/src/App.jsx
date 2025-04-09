@@ -17,6 +17,7 @@ import SubscriptionPlans from "./components/Subscriptions";
 import FreePlans from "./pages/Plans/FreePlans";
 import ProPlans from "./pages/Plans/ProPlans";
 import Premium from "./pages/Plans/Premium";
+import VideoPlayer from "./pages/Plans/VideoPlayer";
 
 const App = () => {
   return (
@@ -38,6 +39,8 @@ const App = () => {
             <Route path="/plans/free" element={<FreePlans />} />
             <Route path="/plans/pro" element={<ProPlans />} />
             <Route path="/plans/premium" element={<Premium />} />
+            <Route path="/courses/:id/learn" element={<VideoPlayer />} />
+
           </Routes>
         </main>
         <Footer />

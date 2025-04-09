@@ -90,8 +90,8 @@ const Contact = () => {
             <div className="space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
                 <Mail className="text-blue-600" size={18} />
-                <a href="mailto:support@learnsphere.com" className="hover:underline">
-                  support@learnsphere.com
+                <a href="mailto:support@Learnity.com" className="hover:underline">
+                  support@Learnity.com
                 </a>
               </div>
               <div className="flex items-center gap-2">

@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
-import CourseDetail from './pages/CourseDetail';
 import Dashboard from './pages/Dashboard';
 
 // Components
@@ -12,6 +11,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
+import Courses from './pages/Courses';
+import CourseDetail from './pages/CourseDetail';
 
 const App = () => {
   return (
@@ -24,10 +25,11 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/contact" element={<Contact />} />
-            {/* Add more routes as needed */}
+
           </Routes>
         </main>
         <Footer/>

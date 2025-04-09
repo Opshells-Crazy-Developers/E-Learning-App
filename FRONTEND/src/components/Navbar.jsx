@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
+import { allCourses } from '../features/courses/courseService';
 
 const Navbar = () => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Courses', path: '/courses' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  useEffect(() => {
+    const uniqueCategories = [...new Set(allCourses.map((c) => c.category))];
+    setCategories(uniqueCategories);
+  }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -23,18 +23,20 @@ const Navbar = () => {
     }
   };
 
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Courses', path: '/courses' },
+    { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-2xl font-bold text-purple-700"
-        >
-          LearnSphere
+        <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-purple-700">
+          Learnity
         </Link>
 
-        {/* Desktop Nav */}
         <div className="hidden md:flex gap-6 items-center flex-1 justify-center">
           {navLinks.map((link) => (
             <Link
@@ -49,7 +51,26 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
+
+          {/* Dynamic Categories */}
+          <div className="relative group">
+            <span className="text-sm font-medium text-gray-700 cursor-pointer group-hover:text-purple-600">
+              Categories
+            </span>
+            <div className="absolute bg-white shadow-lg rounded mt-2 hidden group-hover:block z-50 p-2">
+              {categories.map((cat) => (
+                <Link
+                  key={cat}
+                  to={`/courses?category=${encodeURIComponent(cat)}`}
+                  className="block text-sm text-gray-700 hover:text-purple-600 px-4 py-1"
+                >
+                  {cat}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
+
 
         {/* Search + Auth */}
         <div className="hidden md:flex gap-4 items-center">
@@ -86,10 +107,7 @@ const Navbar = () => {
       {/* Mobile Nav */}
       {menuOpen && (
         <div className="md:hidden px-6 pb-4 space-y-4">
-          <form
-            onSubmit={handleSearch}
-            className="flex items-center border rounded-full px-3 py-1"
-          >
+          <form onSubmit={handleSearch} className="flex items-center border rounded-full px-3 py-1">
             <input
               type="text"
               placeholder="Search courses..."
@@ -97,10 +115,7 @@ const Navbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 text-sm outline-none"
             />
-            <button
-              type="submit"
-              className="text-gray-500 hover:text-purple-600"
-            >
+            <button type="submit" className="text-gray-500 hover:text-purple-600">
               <Search size={16} />
             </button>
           </form>
@@ -126,7 +141,6 @@ const Navbar = () => {
           >
             Login
           </Link>
-
         </div>
       )}
     </nav>

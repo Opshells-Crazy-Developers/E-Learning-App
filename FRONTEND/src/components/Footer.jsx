@@ -41,7 +41,7 @@ const Footer = () => {
           <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
           <ul className="space-y-2 text-sm">
             <li>📞 +91 9876543210</li>
-            <li>📧 support@learnsphere.com</li>
+            <li>📧 support@learniry.com</li>
             <li>🕒 Mon - Fri, 9:00AM - 6:00PM</li>
           </ul>
         </div>
@@ -65,7 +65,7 @@ const Footer = () => {
 
       <hr className="border-gray-300" />
       <div className="text-center text-sm text-gray-500 py-4">
-        © {new Date().getFullYear()} LearnSphere — All Rights Reserved.
+        © {new Date().getFullYear()} Learnity — All Rights Reserved.
       </div>
     </footer>
   );

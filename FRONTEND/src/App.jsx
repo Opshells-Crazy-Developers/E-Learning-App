@@ -18,6 +18,7 @@ import FreePlans from "./pages/Plans/FreePlans";
 import ProPlans from "./pages/Plans/ProPlans";
 import Premium from "./pages/Plans/Premium";
 import VideoPlayer from "./pages/Plans/VideoPlayer";
+import MyCourses from "./pages/MyCourses";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/my-courses" element={<MyCourses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/subscriptions" element={<SubscriptionPlans />} />
             <Route path="/dashboard" element={<Dashboard />} />

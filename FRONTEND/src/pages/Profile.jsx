@@ -158,10 +158,10 @@ const Profile = () => {
             <Box mt={3}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <TextField fullWidth label="Full Name" defaultValue="Mashok Khan" />
+                  <TextField fullWidth label="Full Name" defaultValue="Martin Nel" />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField fullWidth label="Email address" defaultValue="hellopixency@gmail.com" />
+                  <TextField fullWidth label="Email address" defaultValue="nelmartin@gmail.com" />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField fullWidth label="Address" defaultValue="127 Gobadia chittagong, Bangladesh" />

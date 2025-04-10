@@ -52,24 +52,6 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-
-          {/* Dynamic Categories */}
-          <div className="relative group">
-            <span className="text-sm font-medium text-gray-700 cursor-pointer group-hover:text-purple-600">
-              Categories
-            </span>
-            <div className="absolute bg-white shadow-lg rounded mt-2 hidden group-hover:block z-50 p-2">
-              {categories.map((cat) => (
-                <Link
-                  key={cat}
-                  to={`/courses?category=${encodeURIComponent(cat)}`}
-                  className="block text-sm text-gray-700 hover:text-purple-600 px-4 py-1"
-                >
-                  {cat}
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Pages
 import Home from "./pages/Home";
@@ -13,7 +13,9 @@ import ProPlans from "./pages/Plans/ProPlans";
 import Premium from "./pages/Plans/Premium";
 import VideoPlayer from "./pages/Plans/VideoPlayer";
 import MyCourses from "./pages/MyCourses";
-import Login from "./pages/Login"
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+
 // Layouts
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -25,7 +27,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/login" element={<Layout><Login /></Layout>} />
+        <Route path="/login" element={<LoginLayout><Login /></LoginLayout>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
@@ -39,12 +42,12 @@ const App = () => {
         <Route path="/courses/:id/learn" element={<Layout><VideoPlayer /></Layout>} />
         <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
         <Route path="/settings" element={<Layout><Settings /></Layout>} />
-
       </Routes>
     </Router>
   );
 };
 
+// Layout for general pages
 const Layout = ({ children }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
     <Navbar />
@@ -53,11 +56,17 @@ const Layout = ({ children }) => (
   </div>
 );
 
+const LoginLayout = ({ children }) => (
+  <div className="min-h-screen bg-gray-50 flex flex-col">
+    <Navbar />
+    <main className="flex-1 px-4 py-6 w-full">{children}</main>
+  </div>
+);
+
 const DashboardOnly = ({ children }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
     <Navbar />
     <main className="flex-1">{children}</main>
-    {/* No Footer here */}
   </div>
 );
 

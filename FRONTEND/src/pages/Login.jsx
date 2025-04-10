@@ -1,14 +1,42 @@
 import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import { Link } from 'react-router';
 
 const Login = () => {
   const [isRightPanelActive, setRightPanelActive] = useState(false);
+  const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '' });
+  const [signInData, setSignInData] = useState({ email: '', password: '' });
 
   const handleSignUpClick = () => setRightPanelActive(true);
   const handleSignInClick = () => setRightPanelActive(false);
 
+  // Handle form input changes
+  const handleSignUpInputChange = (e) => {
+    const { name, value } = e.target;
+    setSignUpData({ ...signUpData, [name]: value });
+  };
+
+  const handleSignInInputChange = (e) => {
+    const { name, value } = e.target;
+    setSignInData({ ...signInData, [name]: value });
+  };
+
+  // Handle form submissions
+  const handleSignUpSubmit = (e) => {
+    e.preventDefault();
+    // Handle the sign-up API request here
+    console.log('Sign Up Data:', signUpData);
+  };
+
+  const handleSignInSubmit = (e) => {
+    e.preventDefault();
+    // Handle the sign-in API request here
+    console.log('Sign In Data:', signInData);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 to-pink-200 px-4">
-      <div className="relative w-full max-w-4xl h-[520px] bg-white shadow-2xl rounded-xl overflow-hidden transition-all duration-700">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-pink-200 px-4 flex flex-col items-center">
+      <div className="relative w-full max-w-4xl h-[600px] bg-white shadow-2xl rounded-xl overflow-hidden transition-all duration-700 mb-8 mt-8">
         
         {/* Sign Up Form */}
         <div
@@ -16,22 +44,31 @@ const Login = () => {
             isRightPanelActive ? 'translate-x-full opacity-100 z-20' : 'opacity-0 z-10'
           }`}
         >
-          <form className="h-full flex flex-col justify-center items-center px-10 space-y-4">
-            <h1 className="text-3xl font-bold text-purple-700">Create Account</h1>
+          <form className="h-full flex flex-col justify-center items-center px-10 space-y-4" onSubmit={handleSignUpSubmit}>
+            <h1 className="text-3xl font-bold text-purple-700">Create Account with Learnity</h1>
             <input
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="text"
+              name="name"
               placeholder="Name"
+              value={signUpData.name}
+              onChange={handleSignUpInputChange}
             />
             <input
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="email"
+              name="email"
               placeholder="Email"
+              value={signUpData.email}
+              onChange={handleSignUpInputChange}
             />
             <input
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="password"
+              name="password"
               placeholder="Password"
+              value={signUpData.password}
+              onChange={handleSignUpInputChange}
             />
             <button
               type="submit"
@@ -48,21 +85,27 @@ const Login = () => {
             isRightPanelActive ? 'translate-x-full opacity-0 z-10' : 'opacity-100 z-20'
           }`}
         >
-          <form className="h-full flex flex-col justify-center items-center px-10 space-y-4">
-            <h1 className="text-3xl font-bold text-purple-700">Sign In</h1>
+          <form className="h-full flex flex-col justify-center items-center px-10 space-y-4" onSubmit={handleSignInSubmit}>
+            <h1 className="text-3xl font-bold text-purple-700">Sign In to Learnity</h1>
             <input
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="email"
+              name="email"
               placeholder="Email"
+              value={signInData.email}
+              onChange={handleSignInInputChange}
             />
             <input
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               type="password"
+              name="password"
               placeholder="Password"
+              value={signInData.password}
+              onChange={handleSignInInputChange}
             />
-            <a href="#" className="text-sm text-purple-600 hover:underline">
+              <Link to="/forgot-password" className="text-sm text-purple-600 hover:underline">
               Forgot password?
-            </a>
+            </Link>
             <button
               type="submit"
               className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
@@ -92,7 +135,7 @@ const Login = () => {
             <div>
               <h1 className="text-3xl font-bold mb-2">Welcome Back!</h1>
               <p className="text-sm mb-4">
-                To keep connected with us, please login with your personal info
+                To keep connected with Learnity, please login with your personal info
               </p>
               <button
                 onClick={handleSignInClick}
@@ -105,7 +148,7 @@ const Login = () => {
             <div>
               <h1 className="text-3xl font-bold mb-2">Hello!</h1>
               <p className="text-sm mb-4">
-                Enter your details to start your journey with us
+                Enter your details to start your journey with Learnity
               </p>
               <button
                 onClick={handleSignUpClick}

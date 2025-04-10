@@ -1,154 +1,242 @@
-import React, { useState } from "react";
-import {
-  Tabs,
-  Tab,
-  Grid,
-  Typography,
-  Box,
-  Chip,
-  Paper,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+// At the top of your file
+import { useState } from "react";
+import { Link } from "react-router-dom"; // ✅ Correctly placed here
 import Sidebar from "../components/Sidebar";
-import SchoolIcon from "@mui/icons-material/School";
-import { purple } from "@mui/material/colors";
 
-const courses = [
-  { id: 1, title: "React Basics", progress: 100, status: "completed" },
-  { id: 2, title: "Node.js Fundamentals", progress: 45, status: "pending" },
-  { id: 3, title: "UI/UX Design", progress: 80, status: "pending" },
-  { id: 4, title: "MongoDB Mastery", progress: 100, status: "completed" },
-];
+export default function CoursesDashboard() {
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("default");
 
-const MyCourses = () => {
-  const [tab, setTab] = useState("all");
-  const navigate = useNavigate();
+  const courses = [
+    {
+      id: 1,
+      title: "React Fundamentals",
+      progress: 100,
+      status: "completed",
+      instructor: "Sarah Johnson",
+      duration: "8 hours",
+      category: "Frontend",
+      lastAccessed: "2 days ago",
+    },
+    {
+      id: 2,
+      title: "Node.js & Express Masterclass",
+      progress: 45,
+      status: "in-progress",
+      instructor: "Michael Chen",
+      duration: "12 hours",
+      category: "Backend",
+      lastAccessed: "Today",
+    },
+    {
+      id: 3,
+      title: "UI/UX Design Principles",
+      progress: 80,
+      status: "in-progress",
+      instructor: "Emma Rodriguez",
+      duration: "10 hours",
+      category: "Design",
+      lastAccessed: "Yesterday",
+    },
+    {
+      id: 4,
+      title: "MongoDB Database Design",
+      progress: 100,
+      status: "completed",
+      instructor: "David Kim",
+      duration: "6 hours",
+      category: "Database",
+      lastAccessed: "1 week ago",
+    },
+  ];
 
-  const filteredCourses =
-    tab === "all" ? courses : courses.filter((c) => c.status === tab);
+  const filteredCourses = courses
+    .filter((course) => {
+      if (activeTab === "all") return true;
+      if (activeTab === "in-progress") return course.status === "in-progress";
+      if (activeTab === "completed") return course.status === "completed";
+      return true;
+    })
+    .filter(
+      (course) =>
+        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  const handleTabChange = (event, newValue) => {
-    setTab(newValue);
+  const sortedCourses = [...filteredCourses].sort((a, b) => {
+    switch (sortOption) {
+      case "progress-high":
+        return b.progress - a.progress;
+      case "progress-low":
+        return a.progress - b.progress;
+      case "title-asc":
+        return a.title.localeCompare(b.title);
+      case "title-desc":
+        return b.title.localeCompare(a.title);
+      default:
+        return 0;
+    }
+  });
+
+  const getProgressColor = (progress) => {
+    if (progress === 100) return "bg-emerald-500";
+    if (progress >= 70) return "bg-purple-600";
+    if (progress >= 30) return "bg-amber-500";
+    return "bg-rose-500";
   };
 
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
+    <div className="w-64">
       <Sidebar />
-
-      <Box
-        className="ml-64 min-h-screen p-8"
-        sx={{
-          background: "linear-gradient(to bottom, #f5f3ff, #ffffff)",
-        }}
+    </div>
+    <div className="flex-1 p-6 lg:p-10 overflow-x-hidden">
+  
+    <div className="flex justify-between items-center mb-8">
+  <h1 className="text-2xl font-bold text-gray-800">My Learning Journey</h1>
+  <Link to="/courses">
+    <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md flex items-center">
+      <svg
+        className="h-5 w-5 mr-2"
+        fill="currentColor"
+        viewBox="0 0 20 20"
       >
-   
+        <path
+          fillRule="evenodd"
+          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+          clipRule="evenodd"
+        />
+      </svg>
+      Explore Courses
+    </button>
+  </Link>
+</div>
 
-        {/* Styled Tabs (same as Profile) */}
-        <Tabs
-          value={tab}
-          onChange={handleTabChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          sx={{
-            marginBottom: 4,
-            "& .MuiTab-root": {
-              fontWeight: 600,
-              textTransform: "none",
-              color: purple[500],
-              minWidth: 120,
-            },
-            "& .Mui-selected": {
-              color: purple[500],
-            },
-            "& .MuiTabs-indicator": {
-              backgroundColor: purple[500],
-            },
-          }}
-        >
-          <Tab label="All" value="all" />
-          <Tab label="Pending" value="pending" />
-          <Tab label="Completed" value="completed" />
-        </Tabs>
 
-        <Grid container spacing={4}>
-  {filteredCourses.map((course) => (
-    <Grid item xs={12} sm={6} md={4} key={course.id}>
-      <Box
-        onClick={() => navigate(`/video/${course.id}`)}
-        sx={{
-          borderRadius: 3,
-          p: 3,
-          bgcolor: "#ffffff",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-          border: "1px solid #f3e8ff",
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-          "&:hover": {
-            boxShadow: "0 8px 30px rgba(126, 34, 206, 0.15)",
-            borderColor: "#c084fc",
-            transform: "translateY(-4px)",
-          },
-        }}
-      >
-        {/* Header: Icon + Title + Status */}
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Box display="flex" alignItems="center" gap={1}>
-            <SchoolIcon sx={{ color: "#a855f7" }} />
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              {course.title}
-            </Typography>
-          </Box>
-          <Chip
-            label={course.status}
-            size="small"
-            mx = "1"
-            sx={{
-              bgcolor: course.status === "completed" ? "#bbf7d0" : "#fde68a",
-              color: "#1f2937",
-              fontWeight: "bold",
-              px: 1,
-              textTransform: "capitalize",
-            }}
-          />
-        </Box>
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-sm text-gray-500">Total Courses</p>
+            <p className="text-2xl font-bold mt-1">{courses.length}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-sm text-gray-500">In Progress</p>
+            <p className="text-2xl font-bold text-amber-600 mt-1">
+              {courses.filter((c) => c.status === "in-progress").length}
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-sm text-gray-500">Completed</p>
+            <p className="text-2xl font-bold text-emerald-600 mt-1">
+              {courses.filter((c) => c.status === "completed").length}
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="text-sm text-gray-500">Avg. Progress</p>
+            <div className="flex items-center mt-1">
+              <span className="text-2xl font-bold text-purple-600">
+                {Math.round(
+                  courses.reduce((acc, c) => acc + c.progress, 0) /
+                    courses.length
+                )}
+                %
+              </span>
+              <div className="w-full h-2 bg-gray-200 ml-3 rounded">
+                <div
+                  className="h-full rounded bg-purple-600"
+                  style={{
+                    width: `${Math.round(
+                      courses.reduce((acc, c) => acc + c.progress, 0) /
+                        courses.length
+                    )}%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        {/* Progress Info */}
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ mb: 1.5 }}
-        >
-          Progress: {course.progress}%
-        </Typography>
+        {/* Tabs and Filters */}
+        <div className="flex flex-col md:flex-row md:justify-between items-center mb-6 space-y-4 md:space-y-0">
+          <div className="flex border-b border-gray-200">
+            {["all", "in-progress", "completed"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`mr-6 py-2 font-medium text-sm border-b-2 transition ${
+                  activeTab === tab
+                    ? "text-purple-600 border-purple-600"
+                    : "text-gray-500 border-transparent hover:text-gray-700"
+                }`}
+              >
+                {tab === "all"
+                  ? "All Courses"
+                  : tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
 
-        <Box
-          sx={{
-            backgroundColor: "#e5e7eb",
-            borderRadius: "999px",
-            height: 8,
-            width: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            sx={{
-              height: "100%",
-              width: `${course.progress}%`,
-              borderRadius: "inherit",
-              backgroundColor:
-                course.status === "completed" ? "#22c55e" : "#8b5cf6",
-              transition: "width 0.4s ease-in-out",
-            }}
-          />
-        </Box>
-      </Box>
-    </Grid>
-  ))}
-</Grid>
+          <div className="flex space-x-4 w-full md:w-auto">
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-60 text-sm focus:ring-purple-500 focus:border-purple-500"
+            />
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500"
+            >
+              <option value="default">Default</option>
+              <option value="progress-high">Progress (High to Low)</option>
+              <option value="progress-low">Progress (Low to High)</option>
+              <option value="title-asc">Title A-Z</option>
+              <option value="title-desc">Title Z-A</option>
+            </select>
+          </div>
+        </div>
 
-      </Box>
-    </>
+        {/* Course Cards */}
+        {sortedCourses.length === 0 ? (
+          <div className="text-center text-gray-500 py-10 bg-white rounded-md shadow">
+            No courses found.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {sortedCourses.map((course) => (
+              <div
+                key={course.id}
+                className="bg-white p-5 rounded-md shadow hover:shadow-lg transition"
+              >
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {course.title}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  {course.instructor} · {course.duration}
+                </p>
+                <div className="mt-3">
+                  <div className="flex justify-between text-xs mb-1 text-gray-500">
+                    <span>Progress</span>
+                    <span>{course.progress}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                    <div
+                      className={`h-full rounded-full ${getProgressColor(
+                        course.progress
+                      )}`}
+                      style={{ width: `${course.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
-};
-
-export default MyCourses;
+}

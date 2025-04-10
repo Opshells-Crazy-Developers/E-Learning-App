@@ -43,7 +43,7 @@ const Stats = () => {
                 {inView ? (
                   <CountUp
                     end={s.value}
-                    duration={2}
+                    duration={5}
                     separator=","
                     suffix={s.suffix || ''}
                   />

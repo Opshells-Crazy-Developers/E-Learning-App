@@ -1,14 +1,75 @@
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
+const bcrypt = require('bcryptjs');
+const mysql = require('mysql2');
+const bodyParser = require('body-parser');
 
-dotenv.config();
+// Initialize app and MySQL connection
 const app = express();
+app.use(bodyParser.json());
 
-app.use(cors());
-app.use(express.json());
-app.use('/api/auth', authRoutes);
+// Database connection
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root', // Change to your DB username
+  password: 'Pranav@1402', // Change to your DB password
+  database: 'elearning_app' // Change to your DB name
+});
 
+db.connect((err) => {
+  if (err) throw err;
+  console.log('Database connected');
+});
+
+// Sign Up API (POST)
+app.post('/api/signup', async (req, res) => {
+  const { name, email, password } = req.body;
+  
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Insert new user into the database
+    const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    db.query(query, [name, email, hashedPassword], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error in signing up user', error: err });
+      }
+      res.status(201).json({ message: 'User signed up successfully' });
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error in hashing password', error: err });
+  }
+});
+
+// Sign In API (POST)
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  // Get user by email
+  const query = 'SELECT * FROM users WHERE email = ?';
+  db.query(query, [email], async (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error in fetching user', error: err });
+    }
+    
+    if (result.length === 0) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+    
+    // Compare the password with the hashed password in the DB
+    const user = result[0];
+    const isMatch = await bcrypt.compare(password, user.password);
+    
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+    
+    res.status(200).json({ message: 'User signed in successfully', user });
+  });
+});
+
+// Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

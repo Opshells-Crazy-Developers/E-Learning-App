@@ -16,7 +16,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = (req, res) => {
+exports.signin = (req, res) => {
   const { email, password } = req.body;
   const q = 'SELECT * FROM users WHERE email = ?';
 

@@ -11,7 +11,6 @@ import SubscriptionPlans from "./components/Subscriptions";
 import FreePlans from "./pages/Plans/FreePlans";
 import ProPlans from "./pages/Plans/ProPlans";
 import Premium from "./pages/Plans/Premium";
-import VideoPlayer from "./pages/Plans/VideoPlayer";
 import MyCourses from "./pages/MyCourses";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -21,6 +20,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import DashboardLayout from "./pages/Dashboard";
 import Settings from "./pages/Settings";
+import VideoCoursePlayer from "./pages/VideoPlayer";
 
 const App = () => {
   return (
@@ -39,7 +39,7 @@ const App = () => {
         <Route path="/plans/free" element={<Layout><FreePlans /></Layout>} />
         <Route path="/plans/pro" element={<Layout><ProPlans /></Layout>} />
         <Route path="/plans/premium" element={<Layout><Premium /></Layout>} />
-        <Route path="/courses/:id/learn" element={<Layout><VideoPlayer /></Layout>} />
+        <Route path="/courses/:id/learn" element={<Layout><VideoCoursePlayer /></Layout>} />
         <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
         <Route path="/settings" element={<Layout><Settings /></Layout>} />
       </Routes>

@@ -1,4 +1,4 @@
-[
+const allCourses = [
   {
     "id": 1,
     "title": "JavaScript Essentials",
@@ -264,3 +264,10 @@
     ]
   }
 ]
+
+
+export const getCourseById = (id) => {
+  return courses.find((course) => course.id === id);
+};
+
+export default allCourses;

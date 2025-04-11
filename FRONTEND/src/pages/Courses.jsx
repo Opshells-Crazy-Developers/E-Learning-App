@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { allCourses } from '../features/courses/courseService';
+import allCourses  from '../features/courses/courseService';
 import CourseCard from '../components/CourseCard';
 
 const CoursesPage = () => {

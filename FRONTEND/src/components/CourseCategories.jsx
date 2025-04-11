@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CourseCard from '../components/CourseCard';
 import { Filter } from 'lucide-react';
-import { allCourses } from '../features/courses/courseService'; // 👈 import course data
+import  allCourses  from '../features/courses/courseService'; // 👈 import course data
 
 const categories = [
   "All",

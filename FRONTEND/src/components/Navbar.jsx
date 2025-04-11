@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
-import { allCourses } from '../features/courses/courseService';
+import allCourses  from '../features/courses/courseService';
 
 const Navbar = () => {
   const location = useLocation();

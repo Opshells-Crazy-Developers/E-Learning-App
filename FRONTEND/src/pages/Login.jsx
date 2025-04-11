@@ -22,17 +22,55 @@ const Login = () => {
   };
 
   // Handle form submissions
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    // Handle the sign-up API request here
-    console.log('Sign Up Data:', signUpData);
-  };
+ // Inside your handleSignUpSubmit function:
+const handleSignUpSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('http://localhost:5000/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(signUpData),
+    });
+    
+    const result = await response.json();
+    if (response.ok) {
+      alert(result.message);
+      // Optionally, redirect to another page or reset form
+    } else {
+      alert(result.message);
+    }
+  } catch (err) {
+    console.error('Error signing up:', err);
+  }
+};
 
-  const handleSignInSubmit = (e) => {
-    e.preventDefault();
-    // Handle the sign-in API request here
-    console.log('Sign In Data:', signInData);
-  };
+
+const handleSignInSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('http://localhost:5000/api/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(signInData),
+    });
+    
+    const result = await response.json();
+    if (response.ok) {
+      alert(result.message);  // Show success message
+      // Optionally, redirect to another page after successful sign-in
+      // For example: history.push('/dashboard');
+    } else {
+      alert(result.message);  // Show error message from API
+    }
+  } catch (err) {
+    console.error('Error signing in:', err);
+    alert('An error occurred during sign-in.');
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-pink-200 px-4 flex flex-col items-center">

@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { allCourses } from '../features/courses/courseService';
 import CourseCard from '../components/CourseCard';
+import { getCourses } from '../features/courses/courseService'; // Assume this returns a Promise
 
 const CoursesPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-
   const selectedCategory = queryParams.get('category')?.toLowerCase() || '';
   const search = queryParams.get('search')?.toLowerCase() || '';
 
-  // Filtered courses based on query
-  const filteredCourses = allCourses.filter((course) => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch course data dynamically
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCourses(); // Replace with real API call
+        setCourses(data);
+      } catch (err) {
+        console.error('Failed to fetch courses', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Filter courses based on search/category
+  const filteredCourses = courses.filter((course) => {
     const matchesCategory = selectedCategory
       ? course.category.toLowerCase() === selectedCategory
       : true;
@@ -40,7 +57,9 @@ const CoursesPage = () => {
     <div className="max-w-6xl mx-auto px-6 py-8">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Courses</h2>
 
-      {categoryKeys.length === 0 ? (
+      {loading ? (
+        <p className="text-gray-600">Loading courses...</p>
+      ) : categoryKeys.length === 0 ? (
         <p className="text-gray-600">No courses found.</p>
       ) : (
         categoryKeys.map((category) => (

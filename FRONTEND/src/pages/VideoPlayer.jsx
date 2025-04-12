@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, SkipBack, SkipForward, BookOpen, Bookmark, Download, Share2, MessageCircle, CheckCircle } from 'lucide-react';
 
-// Dummy course data with purple theme colors
 const courseData = {
   title: "Advanced Frontend Development",
   description: "Learn modern web development techniques with practical examples",
@@ -18,7 +17,7 @@ const courseData = {
     {
       title: "Module 2: React Basics",
       lessons: [
-        { id: 4, title: "Introduction to React", duration: "18:20", active: false, videoSrc: "" },
+        { id: 4, title: "Introduction to React", duration: "18:20", active: false, videoSrc: "FRONTEND/src/assets/videos/React/M7/M7T1V1.mp4" },
         { id: 5, title: "Components and Props", duration: "22:10", active: false, videoSrc: "" },
         { id: 6, title: "State and Lifecycle", duration: "25:35", active: false, videoSrc: "" },
       ]
@@ -65,37 +64,36 @@ export default function VideoCoursePlayer() {
   };
   
   // Update video progress
-  useEffect(() => {
-    const video = videoRef.current;
-    
-    if (!video) return;
-    
-    const updateProgress = () => {
-      if (video.duration && !isDraggingSeekBar) {
-        const progressValue = (video.currentTime / video.duration) * 100;
-        setProgress(progressValue);
-        setCurrentTime(formatTime(video.currentTime));
-        setDuration(formatTime(video.duration));
-        
-        // Auto-mark lesson as completed when reaching the end (98%)
-        if (progressValue > 98 && !completedLessons.includes(currentLesson.id)) {
-          setCompletedLessons(prev => [...prev, currentLesson.id]);
-        }
-      }
-    };
-    
-    // Set up event listeners
-    video.addEventListener('timeupdate', updateProgress);
-    video.addEventListener('loadedmetadata', () => {
+ useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  const updateProgress = () => {
+    if (video.duration && !isDraggingSeekBar) {
+      const progressValue = (video.currentTime / video.duration) * 100;
+      setProgress(progressValue);
+      setCurrentTime(formatTime(video.currentTime));
       setDuration(formatTime(video.duration));
-    });
-    
-    return () => {
-      video.removeEventListener('timeupdate', updateProgress);
-      video.removeEventListener('loadedmetadata', () => {});
-    };
-  }, [currentLesson, completedLessons, isDraggingSeekBar]);
-  
+
+      if (progressValue > 98 && !completedLessons.includes(currentLesson.id)) {
+        setCompletedLessons(prev => [...prev, currentLesson.id]);
+      }
+    }
+  };
+
+  const handleMetadataLoaded = () => {
+    setDuration(formatTime(video.duration));
+  };
+
+  video.addEventListener('timeupdate', updateProgress);
+  video.addEventListener('loadedmetadata', handleMetadataLoaded);
+
+  return () => {
+    video.removeEventListener('timeupdate', updateProgress);
+    video.removeEventListener('loadedmetadata', handleMetadataLoaded);
+  };
+}, [currentLesson, completedLessons, isDraggingSeekBar]);
+
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -123,6 +121,36 @@ export default function VideoCoursePlayer() {
     }
   };
   
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      switch (e.key) {
+        case ' ':
+          e.preventDefault();
+          togglePlay();
+          break;
+        case 'ArrowRight':
+          skipForward();
+          break;
+        case 'ArrowLeft':
+          skipBackward();
+          break;
+        case 'm':
+          toggleMute();
+          break;
+        case 'f':
+          toggleFullScreen();
+          break;
+        default:
+          break;
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isPlaying, isMuted]);
+  
+
+
   const playLesson = (lesson) => {
     // Only switch lesson, don't auto-mark as completed
     setCurrentLesson(lesson);

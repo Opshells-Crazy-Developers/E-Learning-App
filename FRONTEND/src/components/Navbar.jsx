@@ -83,11 +83,19 @@ const Navbar = () => {
           </form>
 
           <Link
-            to="/login"
-            className="px-4 py-1 border border-purple-600 text-purple-600 rounded hover:bg-purple-50 text-sm transition"
-          >
-            Login
-          </Link>
+  to="/login"
+  className="px-4 py-1 border border-purple-600 bg-purple-600 text-white rounded hover:bg-purple-500 hover:text-white text-sm transition"
+>
+  log in
+</Link>
+
+<Link
+  to="/login"
+  className="px-4 py-1 border border-purple-600 text-purple-600 rounded hover:bg-purple-200 hover:text-purple-500 text-sm transition"
+>
+  Sign up
+</Link>
+
         </div>
 
         {/* Mobile Hamburger */}

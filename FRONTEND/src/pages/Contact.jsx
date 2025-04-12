@@ -126,7 +126,7 @@ const Contact = () => {
           {/* Google Map */}
           <iframe
             title="map"
-            src="https://maps.google.com/maps?q=Noida%20Sector%2015&t=&z=13&ie=UTF8&iwloc=&output=embed"
+            src="https://maps.google.com/maps?q=19.8716499,75.3629447&t=&z=17&ie=UTF8&iwloc=&output=embed"
             className="w-full h-64 border rounded mt-6"
           ></iframe>
         </div>

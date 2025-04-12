@@ -222,42 +222,43 @@ export const getCourses = async () => {
       ]
     },
     {
-      id: 7,
-      title: "Advanced React & Redux",
-      description: "Take your React skills to the next level with Redux and advanced patterns.",
-      instructor: "Michael Brown",
-      category: "Programming",
-      duration: "7.5 hours",
-      level: "Advanced",
-      price: 799,
-      originalPrice: 2999,
-      rating: 4.7,
-      ratingCount: 1950,
-      learners: 8700,
-      thumbnail_url: "https://via.placeholder.com/300x180?text=React+Redux",
-      modules: [
+      "id": 7,
+      "title": "Intro to React",
+      "description": "Learn the fundamentals of React, including components, state, and props, to build interactive web applications.",
+      "instructor": "Jane Doe",
+      "category": "Programming",
+      "duration": "4 hours",
+      "level": "Beginner",
+      "price": 499,
+      "originalPrice": 1499,
+      "rating": 4.5,
+      "ratingCount": 850,
+      "learners": 12000,
+      "thumbnail_url": "https://via.placeholder.com/300x180?text=Intro+to+React",
+      "modules": [
         {
-          title: "Module 1: Advanced React Concepts",
-          lessons: [
-            { id: 1301, title: "Context API In-Depth", duration: "22:15", videoSrc: "/videos/adv-react/module1/context.mp4" },
-            { id: 1302, title: "React Hooks Mastery", duration: "28:30", videoSrc: "/videos/adv-react/module1/hooks.mp4" },
-            { id: 1303, title: "Performance Optimization", duration: "24:45", videoSrc: "/videos/adv-react/module1/performance.mp4" }
+          "title": "Module 1: React Basics",
+          "lessons": [
+            { "id": 1001, "title": "Introduction to React", "duration": "15:00", "videoSrc": "/videos/intro-react/module1/intro.mp4" },
+            { "id": 1002, "title": "Understanding Components", "duration": "18:00", "videoSrc": "/videos/intro-react/module1/components.mp4" },
+            { "id": 1003, "title": "JSX and Rendering", "duration": "20:00", "videoSrc": "/videos/intro-react/module1/jsx.mp4" }
           ]
         },
         {
-          title: "Module 2: Redux and State Management",
-          lessons: [
-            { id: 1401, title: "Redux Core Concepts", duration: "18:30", videoSrc: "/videos/adv-react/module2/redux-core.mp4" },
-            { id: 1402, title: "Redux Middleware", duration: "20:45", videoSrc: "/videos/adv-react/module2/middleware.mp4" },
-            { id: 1403, title: "Redux Toolkit", duration: "26:15", videoSrc: "/videos/adv-react/module2/redux-toolkit.mp4" }
+          "title": "Module 2: State and Props",
+          "lessons": [
+            { "id": 1101, "title": "State in React", "duration": "22:00", "videoSrc": "/videos/intro-react/module2/state.mp4" },
+            { "id": 1102, "title": "Props in React", "duration": "18:00", "videoSrc": "/videos/intro-react/module2/props.mp4" },
+            { "id": 1103, "title": "Handling Events", "duration": "19:00", "videoSrc": "/videos/intro-react/module2/events.mp4" }
           ]
         }
       ],
-      notes: [
-        { id: 13, title: "React Prerequisites", content: "You should be comfortable with React basics before taking this course." },
-        { id: 14, title: "State Management", content: "Consider when to use context vs. Redux in your applications." }
+      "notes": [
+        { "id": 21, "title": "Prerequisites", "content": "Basic understanding of HTML, CSS, and JavaScript is recommended before taking this course." },
+        { "id": 22, "title": "What You'll Learn", "content": "You will learn how to create React components, manage state and props, and handle events to build interactive applications." }
       ]
-    },
+    }
+    ,
     {
       id: 8,
       title: "Docker & Kubernetes for DevOps",

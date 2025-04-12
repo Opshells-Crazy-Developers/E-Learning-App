@@ -590,5 +590,5 @@ export default function VideoCoursePlayer() {
         </div>
       </main>
     </div>
-  );
+  )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
-import allCourses  from '../features/courses/courseService';
+import {getCourses}  from '../features/courses/courseService';
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,10 +10,19 @@ const Navbar = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const uniqueCategories = [...new Set(allCourses.map((c) => c.category))];
-    setCategories(uniqueCategories);
+    const fetchCourses = async () => {
+      try {
+        const getCourses = await getCourses();
+        const uniqueCategories = [...new Set(getCourses.map((c) => c.category))];
+        setCategories(uniqueCategories);
+      } catch (err) {
+        console.error('Failed to fetch courses:', err);
+      }
+    };
+  
+    fetchCourses();
   }, []);
-
+  
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const handleSearch = (e) => {

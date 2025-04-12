@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
+import CourseContentDetails from "./pages/CourseContentDetails";
 import SubscriptionPlans from "./components/Subscriptions";
 import FreePlans from "./pages/Plans/FreePlans";
 import ProPlans from "./pages/Plans/ProPlans";
@@ -26,22 +27,32 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        {/* General Pages */}
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/login" element={<LoginLayout><Login /></LoginLayout>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
+
+        {/* Dashboard and settings */}
         <Route path="/dashboard" element={<DashboardOnly><DashboardLayout /></DashboardOnly>} />
-        <Route path="/courses/:id" element={<Layout><CourseDetail /></Layout>} />
+        <Route path="/settings" element={<Layout><Settings /></Layout>} />
+
+        {/* Subscription Plans */}
         <Route path="/subscriptions" element={<Layout><SubscriptionPlans /></Layout>} />
         <Route path="/plans" element={<Layout><SubscriptionPlans /></Layout>} />
         <Route path="/plans/free" element={<Layout><FreePlans /></Layout>} />
         <Route path="/plans/pro" element={<Layout><ProPlans /></Layout>} />
         <Route path="/plans/premium" element={<Layout><Premium /></Layout>} />
+
+        {/* Course Routes */}
+        <Route path="/courses/:id" element={<Layout><CourseDetail /></Layout>} />
+        <Route path="/courses/:id/content" element={<Layout><CourseContentDetails /></Layout>} />
         <Route path="/courses/:id/learn" element={<Layout><VideoCoursePlayer /></Layout>} />
+
+        {/* My Courses */}
         <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
-        <Route path="/settings" element={<Layout><Settings /></Layout>} />
       </Routes>
     </Router>
   );

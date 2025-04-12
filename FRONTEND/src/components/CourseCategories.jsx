@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CourseCard from '../components/CourseCard';
 import { Filter } from 'lucide-react';
-import  allCourses  from '../features/courses/courseService'; // 👈 import course data
+import  {getCourses}  from '../features/courses/courseService'; // 👈 import course data
 
 const categories = [
   "All",
@@ -19,8 +19,8 @@ const CourseCategories = () => {
 
   const filteredCourses =
     selectedCategory === "All"
-      ? allCourses
-      : allCourses.filter((course) => course.category === selectedCategory);
+      ? getCourses
+      : getCourses.filter((course) => course.category === selectedCategory);
 
   return (
     <section className="py-12 px-4 max-w-7xl mx-auto">

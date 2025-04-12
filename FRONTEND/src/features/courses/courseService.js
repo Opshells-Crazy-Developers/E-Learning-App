@@ -1,4 +1,4 @@
-[
+export const allCourses =[
   {
     "id": 1,
     "title": "JavaScript Essentials",

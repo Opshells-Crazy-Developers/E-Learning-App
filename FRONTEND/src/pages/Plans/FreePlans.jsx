@@ -59,7 +59,7 @@ const Free = () => {
       <div className="text-center mt-16">
         <Link
           to="/subscriptions"
-          className="inline-block text-purple-600 hover:underline font-medium text-sm"
+          className="inline-block text-purple-600 font-bold hover:underline font-large text-sm"
         >
           ← Back to Subscription Plans
         </Link>

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom'; // Fixed import from 'react-router' to 'react-router-dom'
 
 const Login = () => {
   const [isRightPanelActive, setRightPanelActive] = useState(false);
   const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '' });
   const [signInData, setSignInData] = useState({ email: '', password: '' });
+  const [isPasswordVisible, setPasswordVisible] = useState(false); // State for toggling password visibility
+  const [error, setError] = useState(''); // State to show error messages
 
   const handleSignUpClick = () => setRightPanelActive(true);
   const handleSignInClick = () => setRightPanelActive(false);
 
-  // Handle form input changes
   const handleSignUpInputChange = (e) => {
     const { name, value } = e.target;
     setSignUpData({ ...signUpData, [name]: value });
@@ -21,61 +21,77 @@ const Login = () => {
     setSignInData({ ...signInData, [name]: value });
   };
 
-  // Handle form submissions
- // Inside your handleSignUpSubmit function:
-const handleSignUpSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch('http://localhost:5000/api/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(signUpData),
-    });
-    
-    const result = await response.json();
-    if (response.ok) {
-      alert(result.message);
-      // Optionally, redirect to another page or reset form
-    } else {
-      alert(result.message);
-    }
-  } catch (err) {
-    console.error('Error signing up:', err);
-  }
-};
+  const handleShowPasswordToggle = () => setPasswordVisible(!isPasswordVisible); // Toggle password visibility
 
+  const handleSignUpSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSignInSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch('http://localhost:5000/api/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(signInData),
-    });
-    
-    const result = await response.json();
-    if (response.ok) {
-      alert(result.message);  // Show success message
-      // Optionally, redirect to another page after successful sign-in
-      // For example: history.push('/dashboard');
-    } else {
-      alert(result.message);  // Show error message from API
+    // Validate inputs
+    if (!signUpData.name || !signUpData.email || !signUpData.password) {
+      setError('Please fill all the fields');
+      return;
     }
-  } catch (err) {
-    console.error('Error signing in:', err);
-    alert('An error occurred during sign-in.');
-  }
-};
+
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signUpData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        // Optionally, redirect to another page or reset form
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      console.error('Error signing up:', err);
+      alert('An error occurred during sign-up.');
+    }
+  };
+
+  const handleSignInSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate inputs
+    if (!signInData.email || !signInData.password) {
+      setError('Please fill all the fields');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signInData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        // Optionally, redirect to another page after successful sign-in
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      console.error('Error signing in:', err);
+      alert('An error occurred during sign-in.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-pink-200 px-4 flex flex-col items-center">
       <div className="relative w-full max-w-4xl h-[600px] bg-white shadow-2xl rounded-xl overflow-hidden transition-all duration-700 mb-8 mt-8">
         
+        {/* Error Message */}
+        {error && <div className="absolute top-0 left-0 w-full bg-red-500 text-white text-center p-2">{error}</div>}
+
         {/* Sign Up Form */}
         <div
           className={`absolute top-0 h-full w-1/2 transition-all duration-700 bg-white z-10 ${
@@ -100,14 +116,22 @@ const handleSignInSubmit = async (e) => {
               value={signUpData.email}
               onChange={handleSignUpInputChange}
             />
-            <input
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={signUpData.password}
-              onChange={handleSignUpInputChange}
-            />
+            <div className="relative w-full">
+              <input
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type={isPasswordVisible ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={signUpData.password}
+                onChange={handleSignUpInputChange}
+              />
+              <span
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={handleShowPasswordToggle}
+              >
+                {isPasswordVisible ? '👁️' : '🙈'}
+              </span>
+            </div>
             <button
               type="submit"
               className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
@@ -133,15 +157,23 @@ const handleSignInSubmit = async (e) => {
               value={signInData.email}
               onChange={handleSignInInputChange}
             />
-            <input
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={signInData.password}
-              onChange={handleSignInInputChange}
-            />
-              <Link to="/forgot-password" className="text-sm text-purple-600 hover:underline">
+            <div className="relative w-full">
+              <input
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type={isPasswordVisible ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={signInData.password}
+                onChange={handleSignInInputChange}
+              />
+              <span
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={handleShowPasswordToggle}
+              >
+                {isPasswordVisible ? '👁️' : '🙈'}
+              </span>
+            </div>
+            <Link to="/forgot-password" className="text-sm text-purple-600 hover:underline">
               Forgot password?
             </Link>
             <button

@@ -6,7 +6,7 @@ const testimonials = [
   {
     name: 'Aishwarya Patel',
     role: 'Frontend Developer',
-    quote: 'LearnSphere helped me land my first dev job! The frontend courses were clear, well-structured, and packed with projects that made my resume stand out.',
+    quote: 'learnity helped me land my first dev job! The frontend courses were clear, well-structured, and packed with projects that made my resume stand out.',
     image: 'https://i.pravatar.cc/150?img=47',
   },
   {
@@ -36,7 +36,7 @@ const testimonials = [
   {
     name: 'Kunal Verma',
     role: 'Security Analyst',
-    quote: 'LearnSphere introduced me to system-level topics and Linux fundamentals. The real-world examples and easy explanations really helped me grasp concepts quickly.',
+    quote: 'learnity introduced me to system-level topics and Linux fundamentals. The real-world examples and easy explanations really helped me grasp concepts quickly.',
     image: 'https://i.pravatar.cc/150?img=49',
   },
 ];

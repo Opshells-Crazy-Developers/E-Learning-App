@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Underdog&display=swap');
 @import "tailwindcss";
 
+/* Now your global styles can follow */
 body {
-    font-family: theme('fontFamily.sans');
-  }
+  font-family: "Underdog", system-ui, sans-serif;
+}

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search } from 'lucide-react';
-import {getCourses}  from '../features/courses/courseService';
+import { Menu, X, Search, User } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext'; // 👈 import context
+import { getCourses } from '../features/courses/courseService';
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, logout } = useContext(AuthContext); // 👈 auth state
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
@@ -12,34 +14,33 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await getCourses();
-        const uniqueCategories = [...new Set(getCourses.map((c) => c.category))];
+        const allCourses = await getCourses();
+        const uniqueCategories = [...new Set(allCourses.map(c => c.category))];
         setCategories(uniqueCategories);
       } catch (err) {
         console.error('Failed to fetch courses:', err);
       }
     };
-  
     fetchCourses();
   }, []);
-  
-  const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  const toggleMenu = () => setMenuOpen(!menuOpen);
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      console.log(`Searching for: ${searchTerm}`);
-    }
+    if (searchTerm.trim()) console.log(`Searching for: ${searchTerm}`);
   };
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Subscriptions', path: '/subscriptions' },
+    ...(user ? [
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'My Courses', path: '/my-courses' },
+      { name: 'Subscriptions', path: '/subscriptions' },
+    ] : []),
     { name: 'Contact', path: '/contact' },
   ];
-  
+
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
@@ -63,7 +64,6 @@ const Navbar = () => {
           ))}
         </div>
 
-
         {/* Search + Auth */}
         <div className="hidden md:flex gap-4 items-center">
           <form onSubmit={handleSearch} className="relative">
@@ -74,28 +74,33 @@ const Navbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border border-gray-300 rounded-full px-4 py-1 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1.5 text-gray-500 hover:text-purple-600"
-            >
+            <button type="submit" className="absolute right-2 top-1.5 text-gray-500 hover:text-purple-600">
               <Search size={16} />
             </button>
           </form>
 
-          <Link
-  to="/login"
-  className="px-4 py-1 border border-purple-600 bg-purple-600 text-white rounded hover:bg-purple-500 hover:text-white text-sm transition"
->
-  log in
-</Link>
-
-<Link
-  to="/login"
-  className="px-4 py-1 border border-purple-600 text-purple-600 rounded hover:bg-purple-200 hover:text-purple-500 text-sm transition"
->
-  Sign up
-</Link>
-
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link to="/profile" title="Profile">
+                <User className="text-purple-700" />
+              </Link>
+              <button
+                onClick={logout}
+                className="px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className="px-4 py-1 border border-purple-600 bg-purple-600 text-white rounded hover:bg-purple-500 hover:text-white text-sm transition">
+                Log in
+              </Link>
+              <Link to="/signup" className="px-4 py-1 border border-purple-600 text-purple-600 rounded hover:bg-purple-200 hover:text-purple-500 text-sm transition">
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -104,22 +109,9 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden px-6 pb-4 space-y-4">
-          <form onSubmit={handleSearch} className="flex items-center border rounded-full px-3 py-1">
-            <input
-              type="text"
-              placeholder="Search courses..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 text-sm outline-none"
-            />
-            <button type="submit" className="text-gray-500 hover:text-purple-600">
-              <Search size={16} />
-            </button>
-          </form>
-
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -134,13 +126,22 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-
-          <Link
-            to="/login"
-            className="block border border-purple-600 text-purple-600 px-3 py-1 rounded hover:bg-purple-50 transition"
-          >
-            Login
-          </Link>
+          {user ? (
+            <>
+              <Link to="/profile" className="block text-purple-700">Profile</Link>
+              <button
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+                className="block text-red-500"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="block text-purple-600">Login</Link>
+          )}
         </div>
       )}
     </nav>

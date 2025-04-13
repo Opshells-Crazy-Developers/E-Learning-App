@@ -22,6 +22,12 @@ import Footer from "./components/Footer";
 import DashboardLayout from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import VideoCoursePlayer from "./pages/VideoPlayer";
+import AdminLayout from "./Admin/AdminLayout";
+import UserList from "./Admin/UsersList";
+import CourseFormModal from "./features/courses/CourseFormModal";
+import StatCard from "./components/Analytics/StatCard";
+import RevenueReport from "./components/Analytics/RevenueReport";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -53,6 +59,14 @@ const App = () => {
 
         {/* My Courses */}
         <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
+
+        {/* Admin Routes */}
+        <Route path="/admin-layout" element={<Layout><AdminLayout /></Layout>} />
+        <Route path="/users-list" element={<Layout><UserList /></Layout>} />
+        <Route path="/course-form-modal" element={<Layout><CourseFormModal /></Layout>} />
+        <Route path="/statcard" element={<Layout><StatCard /></Layout>} />
+        <Route path="/revenue-report" element={<Layout><RevenueReport /></Layout>} />
+        <Route path="/admin-dashboard" element={<Layout><AdminDashboard /></Layout>} />
       </Routes>
     </Router>
   );

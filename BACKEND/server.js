@@ -2,9 +2,18 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // Initialize app and MySQL connection
 const app = express();
+
+// CORS middleware should be added before routes
+app.use(cors({
+  origin: 'http://localhost:5173', // Your frontend URL
+  methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 app.use(bodyParser.json());
 
 // Database connection
@@ -23,11 +32,11 @@ db.connect((err) => {
 // Sign Up API (POST)
 app.post('/api/signup', async (req, res) => {
   const { name, email, password } = req.body;
-  
+
   try {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     // Insert new user into the database
     const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
     db.query(query, [name, email, hashedPassword], (err, result) => {
@@ -44,26 +53,26 @@ app.post('/api/signup', async (req, res) => {
 // Sign In API (POST)
 app.post('/api/signin', (req, res) => {
   const { email, password } = req.body;
-  
+
   // Get user by email
   const query = 'SELECT * FROM users WHERE email = ?';
   db.query(query, [email], async (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Error in fetching user', error: err });
     }
-    
+
     if (result.length === 0) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-    
+
     // Compare the password with the hashed password in the DB
     const user = result[0];
     const isMatch = await bcrypt.compare(password, user.password);
-    
+
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-    
+
     res.status(200).json({ message: 'User signed in successfully', user });
   });
 });

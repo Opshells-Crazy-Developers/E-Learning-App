@@ -28,51 +28,9 @@ import CourseFormModal from "./features/courses/CourseFormModal";
 import StatCard from "./components/Analytics/StatCard";
 import RevenueReport from "./components/Analytics/RevenueReport";
 import AdminDashboard from "./pages/AdminDashboard";
+import TestQuiz from "./pages/TestQuiz";
 
-const App = () => {
-  return (
-    <Router>
-      <Routes>
-        {/* General Pages */}
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/login" element={<LoginLayout><Login /></LoginLayout>} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={<Layout><Profile /></Layout>} />
-        <Route path="/contact" element={<Layout><Contact /></Layout>} />
-        <Route path="/courses" element={<Layout><Courses /></Layout>} />
-
-        {/* Dashboard and settings */}
-        <Route path="/dashboard" element={<DashboardOnly><DashboardLayout /></DashboardOnly>} />
-        <Route path="/settings" element={<Layout><Settings /></Layout>} />
-
-        {/* Subscription Plans */}
-        <Route path="/subscriptions" element={<Layout><SubscriptionPlans /></Layout>} />
-        <Route path="/plans" element={<Layout><SubscriptionPlans /></Layout>} />
-        <Route path="/plans/free" element={<Layout><FreePlans /></Layout>} />
-        <Route path="/plans/pro" element={<Layout><ProPlans /></Layout>} />
-        <Route path="/plans/premium" element={<Layout><Premium /></Layout>} />
-
-        {/* Course Routes */}
-        <Route path="/courses/:id" element={<Layout><CourseDetail /></Layout>} />
-        <Route path="/courses/:id/content" element={<Layout><CourseContentDetails /></Layout>} />
-        <Route path="/courses/:id/learn" element={<Layout><VideoCoursePlayer /></Layout>} />
-
-        {/* My Courses */}
-        <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
-
-        {/* Admin Routes */}
-        <Route path="/admin-layout" element={<Layout><AdminLayout /></Layout>} />
-        <Route path="/users-list" element={<Layout><UserList /></Layout>} />
-        <Route path="/course-form-modal" element={<Layout><CourseFormModal /></Layout>} />
-        <Route path="/statcard" element={<Layout><StatCard /></Layout>} />
-        <Route path="/revenue-report" element={<Layout><RevenueReport /></Layout>} />
-        <Route path="/admin-dashboard" element={<Layout><AdminDashboard /></Layout>} />
-      </Routes>
-    </Router>
-  );
-};
-
-// Layout for general pages
+// Layouts for different page categories
 const Layout = ({ children }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
     <Navbar />
@@ -83,7 +41,6 @@ const Layout = ({ children }) => (
 
 const LoginLayout = ({ children }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
-    <Navbar />
     <main className="flex-1 px-4 py-6 w-full">{children}</main>
   </div>
 );
@@ -94,5 +51,53 @@ const DashboardOnly = ({ children }) => (
     <main className="flex-1">{children}</main>
   </div>
 );
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* General Pages */}
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/login" element={<LoginLayout><Login /></LoginLayout>} />
+        <Route path="/forgot-password" element={<LoginLayout><ForgotPassword /></LoginLayout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/courses" element={<Layout><Courses /></Layout>} />
+        <Route path="/test-quiz" element={<Layout><TestQuiz /></Layout>} />
+
+
+        {/* Dashboard and settings */}
+        <Route path="/dashboard" element={<DashboardOnly><DashboardLayout /></DashboardOnly>} />
+        <Route path="/settings" element={<Layout><Settings /></Layout>} />
+
+        {/* Subscription Plans */}
+        <Route path="/subscriptions" element={<Layout><SubscriptionPlans /></Layout>} />
+        <Route path="/plans" element={<Layout><SubscriptionPlans /></Layout>} />
+        <Route path="/plans/*" element={<Layout />}>
+          <Route path="free" element={<FreePlans />} />
+          <Route path="pro" element={<ProPlans />} />
+          <Route path="premium" element={<Premium />} />
+        </Route>
+
+        {/* Course Routes */}
+        <Route path="/courses/:id" element={<Layout><CourseDetail /></Layout>} />
+        <Route path="/courses/:id/content" element={<Layout><CourseContentDetails /></Layout>} />
+        <Route path="/courses/:id/learn" element={<Layout><VideoCoursePlayer /></Layout>} />
+
+        {/* My Courses */}
+        <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/*" element={<Layout><AdminLayout /></Layout>}>
+          <Route path="users-list" element={<UserList />} />
+          <Route path="course-form-modal" element={<CourseFormModal />} />
+          <Route path="statcard" element={<StatCard />} />
+          <Route path="revenue-report" element={<RevenueReport />} />
+          <Route path="admin-dashboard" element={<AdminDashboard />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

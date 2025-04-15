@@ -1,109 +1,96 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const mysql = require('mysql2');
+const mysql = require('mysql2');  // Using mysql2 for better support with promises
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
+const courseRoutes = require('./routes/courseRoutes');
+const enrollmentRoutes = require('./routes/enrollmentRoutes');
 
-// Initialize app and MySQL connection
 const app = express();
 
-// CORS middleware should be added before routes
+// --- Middleware ---
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
-  methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
-  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+  origin: 'http://localhost:5173', // frontend URL
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
 }));
-
 app.use(bodyParser.json());
 
-// Database connection
+// --- MySQL DB Setup ---
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // Change to your DB username
-  password: 'Pranav@1402', // Change to your DB password
-  database: 'elearning_app' // Change to your DB name
+  user: 'root',
+  password: 'Pranav@1402',
+  database: 'elearning_app'
 });
 
 db.connect((err) => {
   if (err) throw err;
-  console.log('Database connected');
+  console.log('✅ MySQL database connected');
 });
 
-// Sign Up API (POST)
-app.post('/api/signup', async (req, res) => {
-  const { name, email, password } = req.body;
+// --- Route to fetch course data ---
+app.get('/api/course/:id', (req, res) => {
+  const courseId = req.params.id;
 
-  try {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Insert new user into the database
-    const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
-    db.query(query, [name, email, hashedPassword], (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error in signing up user', error: err });
-      }
-      res.status(201).json({ message: 'User signed up successfully' });
-    });
-  } catch (err) {
-    res.status(500).json({ message: 'Error in hashing password', error: err });
-  }
-});
-
-// Add a profile update route
-app.put('/api/profile', async (req, res) => {
-  const { userId, name, email, address, city, state, zipCode, country } = req.body;
-
-  try {
-    const query = `
-      UPDATE users
-      SET name = ?, email = ?, address = ?, city = ?, state = ?, zip_code = ?, country = ?, updated_at = NOW()
-      WHERE id = ?;
-    `;
-    const values = [name, email, address, city, state, zipCode, country, userId];
-    const [result] = await pool.execute(query, values);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    res.status(200).json({ message: 'Profile updated successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Something went wrong.' });
-  }
-});
-
-
-// Sign In API (POST)
-app.post('/api/signin', (req, res) => {
-  const { email, password } = req.body;
-
-  // Get user by email
-  const query = 'SELECT * FROM users WHERE email = ?';
-  db.query(query, [email], async (err, result) => {
+  // Fetch course details
+  const courseQuery = `SELECT * FROM courses WHERE id = ?`;
+  db.query(courseQuery, [courseId], (err, courseResults) => {
     if (err) {
-      return res.status(500).json({ message: 'Error in fetching user', error: err });
+      return res.status(500).json({ message: 'Error fetching course details' });
     }
 
-    if (result.length === 0) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
+    const course = courseResults[0];
 
-    // Compare the password with the hashed password in the DB
-    const user = result[0];
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Fetch modules for the course
+    const modulesQuery = `SELECT * FROM modules WHERE course_id = ?`;
+    db.query(modulesQuery, [courseId], (err, modulesResults) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error fetching modules' });
+      }
 
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
+      // Fetch lessons for each module asynchronously
+      const modulesWithLessons = modulesResults.map(module => {
+        return new Promise((resolve, reject) => {
+          const lessonsQuery = `SELECT * FROM lessons WHERE module_id = ?`;
+          db.query(lessonsQuery, [module.id], (err, lessonsResults) => {
+            if (err) {
+              reject('Error fetching lessons');
+            }
+            module.lessons = lessonsResults;
+            resolve(module);
+          });
+        });
+      });
 
-    res.status(200).json({ message: 'User signed in successfully', user });
+      // Fetch notes for the course
+      const notesQuery = `SELECT * FROM notes WHERE course_id = ?`;
+      db.query(notesQuery, [courseId], (err, notesResults) => {
+        if (err) {
+          return res.status(500).json({ message: 'Error fetching notes' });
+        }
+
+        // Wait for all lessons data to be fetched
+        Promise.all(modulesWithLessons)
+          .then(modulesWithLessonsData => {
+            res.json({
+              ...course,
+              modules: modulesWithLessonsData,
+              notes: notesResults
+            });
+          })
+          .catch(err => res.status(500).json({ message: err }));
+      });
+    });
   });
 });
 
-// Start the server
+// --- Use course and enrollment routes ---
+app.use('/api/courses', courseRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+
+// --- Start Server ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

@@ -13,7 +13,7 @@ export const mockCourses = [
 export const mockUsers = [
   { id: 1, name: 'Emma Johnson', email: 'emma@example.com', role: 'student', coursesEnrolled: 2, 
     lastActive: '2025-04-10', status: 'active' },
-  { id: 2, name: 'Michael Brown', email: 'michael@example.com', role: 'student', coursesEnrolled: 1, 
+  { id: 2, name: 'Michael Clark', email: 'michael@example.com', role: 'student', coursesEnrolled: 1, 
     lastActive: '2025-04-12', status: 'active' },
   { id: 3, name: 'Jane Smith', email: 'jane@example.com', role: 'instructor', coursesEnrolled: 0, 
     lastActive: '2025-04-13', status: 'active' },

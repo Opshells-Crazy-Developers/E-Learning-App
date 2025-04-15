@@ -7,6 +7,7 @@ import {
   BarChart2,
   Settings,
   LogOut,
+  PlusCircle,
 } from 'lucide-react';
 
 function Sidebar() {
@@ -14,15 +15,15 @@ function Sidebar() {
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <Home size={20} />, path: '/admin' },
-    { id: 'courses', label: 'Courses', icon: <BookOpen size={20} />, path: '/admin/courses' },
+    { id: 'dashboard', label: 'Dashboard', icon: <Home size={20} />, path: '/admin/dashboard' },
     { id: 'users', label: 'Users', icon: <Users size={20} />, path: '/admin/users' },
+    { id: 'add-course', label: 'Add Course', icon: <PlusCircle size={20} />, path: '/admin/add-course' },
     { id: 'analytics', label: 'Analytics', icon: <BarChart2 size={20} />, path: '/admin/analytics' },
     { id: 'settings', label: 'Settings', icon: <Settings size={20} />, path: '/admin/settings' },
   ];
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-purple-800 text-white flex flex-col justify-between shadow-lg z-50">
+    <div className="h-screen w-full bg-purple-800 text-white flex flex-col justify-between shadow-lg">
       {/* Brand / Logo Section */}
       <div className="p-6 flex items-center gap-2 border-b border-purple-600">
         <BookOpen size={26} />

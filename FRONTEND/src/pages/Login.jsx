@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import firebaseAuthService from '../firebase/Auth'; // Adjust path as needed
+import firebaseAuthService from '../firebase/Auth'; // Adjust path if needed
 
 const Login = () => {
   const [isRightPanelActive, setRightPanelActive] = useState(false);
-  const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '' });
+  const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '', role: 'user' });
   const [signInData, setSignInData] = useState({ email: '', password: '' });
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showSignInPassword, setShowSignInPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loginRole, setLoginRole] = useState('user'); // user | admin
 
   const signUpNameRef = useRef(null);
   const signUpEmailRef = useRef(null);
   const signUpPasswordRef = useRef(null);
-
   const signInEmailRef = useRef(null);
   const signInPasswordRef = useRef(null);
 
@@ -32,45 +32,30 @@ const Login = () => {
   };
 
   useEffect(() => {
-    // Clear inputs when switching panels
-    setSignUpData({ name: '', email: '', password: '' });
+    setSignUpData({ name: '', email: '', password: '', role: 'user' });
     setSignInData({ email: '', password: '' });
   }, [isRightPanelActive]);
 
- // In Login.js, update the handleSignUpSubmit function
-const handleSignUpSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
-  const { name, email, password } = signUpData;
+  const handleSignUpSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    const { name, email, password, role } = signUpData;
 
-  if (!name || !email || !password) {
-    setError('Please fill all the fields');
-    toast.error('Please fill all the fields');
-    return;
-  }
-
-  try {
-    // Create the user
-    const userCredential = await doCreateUserWithEmailAndPassword(email, password);
-    
-    // Update the user profile with the name
-    await userCredential.user.updateProfile({
-      displayName: name
-    });
-    
-    toast.success('Signup successful!');
-    setSignUpData({ name: '', email: '', password: '' });
-    setTimeout(() => (window.location.href = '/'), 2000);
-  } catch (err) {
-    console.error('Signup Error:', err.message);
-    toast.error(err.message || 'Signup failed');
-  }
-
+    if (!name || !email || !password) {
+      setError('Please fill all the fields');
+      toast.error('Please fill all the fields');
+      return;
+    }
 
     try {
-      await doCreateUserWithEmailAndPassword(email, password);
+      const userCredential = await doCreateUserWithEmailAndPassword(email, password);
+      await userCredential.user.updateProfile({ displayName: name });
+
+      // Set user role in the database if needed (you can add this step)
+      // Example: saveRoleInDatabase(userCredential.user.uid, role);
+
       toast.success('Signup successful!');
-      setSignUpData({ name: '', email: '', password: '' });
+      setSignUpData({ name: '', email: '', password: '', role: 'user' });
       setTimeout(() => (window.location.href = '/'), 2000);
     } catch (err) {
       console.error('Signup Error:', err.message);
@@ -90,10 +75,19 @@ const handleSignUpSubmit = async (e) => {
     }
 
     try {
-      await doSignInWithEmailAndPassword(email, password);
+      const userCredential = await doSignInWithEmailAndPassword(email, password);
+      const isAdmin = loginRole === 'admin';
+
       toast.success('Sign in successful!');
       setSignInData({ email: '', password: '' });
-      setTimeout(() => (window.location.href = '/'), 2000);
+
+      setTimeout(() => {
+        if (isAdmin) {
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/dashboard';
+        }
+      }, 1500);
     } catch (err) {
       console.error('Signin Error:', err.message);
       toast.error(err.message || 'Sign in failed');
@@ -137,8 +131,8 @@ const handleSignUpSubmit = async (e) => {
                 type={showSignUpPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Password"
-                value={signUpData.password}
                 ref={signUpPasswordRef}
+                value={signUpData.password}
                 onChange={handleInputChange(setSignUpData)}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
@@ -149,6 +143,31 @@ const handleSignUpSubmit = async (e) => {
                 {showSignUpPassword ? <Visibility /> : <VisibilityOff />}
               </span>
             </div>
+
+            {/* Admin/User Role */}
+            <div className="flex space-x-4 mt-2 text-sm">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  checked={signUpData.role === 'user'}
+                  onChange={() => setSignUpData({ ...signUpData, role: 'user' })}
+                />
+                <span>User</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="admin"
+                  checked={signUpData.role === 'admin'}
+                  onChange={() => setSignUpData({ ...signUpData, role: 'admin' })}
+                />
+                <span>Admin</span>
+              </label>
+            </div>
+
             <button
               type="submit"
               className="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
@@ -188,6 +207,31 @@ const handleSignUpSubmit = async (e) => {
                 {showSignInPassword ? <Visibility /> : <VisibilityOff />}
               </span>
             </div>
+
+            {/* Admin/User Role */}
+            <div className="flex space-x-4 mt-2 text-sm">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  checked={loginRole === 'user'}
+                  onChange={() => setLoginRole('user')}
+                />
+                <span>User</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="admin"
+                  checked={loginRole === 'admin'}
+                  onChange={() => setLoginRole('admin')}
+                />
+                <span>Admin</span>
+              </label>
+            </div>
+
             <Link to="/forgot-password" className="text-sm text-purple-600 hover:underline">
               Forgot password?
             </Link>

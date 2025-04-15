@@ -20,12 +20,11 @@ const CourseDetail = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch the course data whenever the id changes
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        setLoading(true);
-        const selectedCourse = await getCourseById(id);
+        const courses = await getCourses();
+        const selectedCourse = courses.find((c) => c.id.toString() === id);
         setCourse(selectedCourse);
       } catch (error) {
         console.error("Error fetching course:", error);
@@ -37,6 +36,32 @@ const CourseDetail = () => {
     fetchCourse();
   }, [id]);
 
+  if (loading) {
+    return <div className="text-center mt-20 text-xl">Loading course...</div>;
+  }
+
+  if (!course) {
+    return <div className="text-center mt-20 text-xl">Course not found.</div>;
+  }
+  const handleEnroll = async () => {
+    try {
+      // Example: Replace '1' with dynamic user ID based on authentication context
+      const user_id = 1; // Example static value; replace with actual user context
+      const res = await axios.post("http://localhost:5000/api/enrollments/enroll", {
+        user_id: 1,
+        course_id: course.id,
+      });
+      
+      
+      console.log("Enrollment response:", res);
+      alert("Enrolled Successfully!");
+    } catch (err) {
+      console.error("Enrollment error:", err);
+      alert("Something went wrong. Please try again later.");
+    }
+  };
+  
+  
   // Function to return a default image if no thumbnail is available
   const getCourseImage = (course) => {
     return course?.thumbnail_url || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1200&q=80";
@@ -53,6 +78,7 @@ const CourseDetail = () => {
       </div>
     );
   }
+  
 
   // If course is not found, show an error message
   if (!course) {
@@ -167,9 +193,13 @@ const CourseDetail = () => {
                     <span className="ml-3 text-gray-600">Certificate of completion</span>
                   </div>
                 </div>
-                <button className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors">
-                  Enroll Now
-                </button>
+                <button
+  onClick={handleEnroll} // Wire the function here
+  className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors"
+>
+  Enroll Now
+</button>
+
                 <p className="text-sm text-gray-500 text-center">30-day money-back guarantee</p>
               </div>
             </div>

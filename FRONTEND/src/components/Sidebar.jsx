@@ -41,7 +41,7 @@ const Sidebar = () => {
       <aside
         className={`${
           isOpen ? "block" : "hidden"
-        } md:block bg-white h-screen shadow-lg w-64 fixed top-0 left-0 z-50 transition-all duration-300 ease-in-out`}
+        } md:block bg-white h-screen shadow-lg w-52 fixed top-0 left-0 z-50 transition-all duration-300 ease-in-out`}
       >
         <div className="p-4 font-bold text-purple-600 text-2xl">Learnity</div>
         <nav className="mt-6">

@@ -22,15 +22,19 @@ import Footer from "./components/Footer";
 import DashboardLayout from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import VideoCoursePlayer from "./pages/VideoPlayer";
+
+// Admin Pages
 import AdminLayout from "./Admin/AdminLayout";
 import UserList from "./Admin/UsersList";
 import CourseFormModal from "./features/courses/CourseFormModal";
 import StatCard from "./components/Analytics/StatCard";
 import RevenueReport from "./components/Analytics/RevenueReport";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./Admin/AdminDashboard";
 import TestQuiz from "./pages/TestQuiz";
+import AdminNavbar from "./Admin/Navbar";
+import AddCourse from "./Admin/AddCourses";
 
-// Layouts for different page categories
+// Layouts
 const Layout = ({ children }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
     <Navbar />
@@ -52,6 +56,15 @@ const DashboardOnly = ({ children }) => (
   </div>
 );
 
+// Admin-only layout with AdminNavbar and no user Navbar/Footer
+const AdminOnlyLayout = ({ children }) => (
+  <div className="min-h-screen bg-white flex flex-col">
+    <AdminNavbar />
+    <main className="flex-1 px-4 py-6 max-w-7xl mx-auto">{children}</main>
+    {/* Add custom admin footer here if needed */}
+  </div>
+);
+
 const App = () => {
   return (
     <Router>
@@ -65,7 +78,6 @@ const App = () => {
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
         <Route path="/test-quiz" element={<Layout><TestQuiz /></Layout>} />
 
-
         {/* Dashboard and settings */}
         <Route path="/dashboard" element={<DashboardOnly><DashboardLayout /></DashboardOnly>} />
         <Route path="/settings" element={<Layout><Settings /></Layout>} />
@@ -73,11 +85,9 @@ const App = () => {
         {/* Subscription Plans */}
         <Route path="/subscriptions" element={<Layout><SubscriptionPlans /></Layout>} />
         <Route path="/plans" element={<Layout><SubscriptionPlans /></Layout>} />
-        <Route path="/plans/*" element={<Layout />}>
-          <Route path="free" element={<FreePlans />} />
-          <Route path="pro" element={<ProPlans />} />
-          <Route path="premium" element={<Premium />} />
-        </Route>
+        <Route path="/plans/free" element={<Layout><FreePlans /></Layout>} />
+        <Route path="/plans/pro" element={<Layout><ProPlans /></Layout>} />
+        <Route path="/plans/premium" element={<Layout><Premium /></Layout>} />
 
         {/* Course Routes */}
         <Route path="/courses/:id" element={<Layout><CourseDetail /></Layout>} />
@@ -88,13 +98,13 @@ const App = () => {
         <Route path="/my-courses" element={<Layout><MyCourses /></Layout>} />
 
         {/* Admin Routes */}
-        <Route path="/admin/*" element={<Layout><AdminLayout /></Layout>}>
-          <Route path="users-list" element={<UserList />} />
-          <Route path="course-form-modal" element={<CourseFormModal />} />
-          <Route path="statcard" element={<StatCard />} />
-          <Route path="revenue-report" element={<RevenueReport />} />
-          <Route path="admin-dashboard" element={<AdminDashboard />} />
-        </Route>
+        <Route path="/admin" element={<AdminOnlyLayout><AdminLayout /></AdminOnlyLayout>} />
+        <Route path="/admin/users" element={<AdminOnlyLayout><UserList /></AdminOnlyLayout>} />
+        <Route path="/admin/course-form-modal" element={<AdminOnlyLayout><CourseFormModal /></AdminOnlyLayout>} />
+        <Route path="/admin/statcard" element={<AdminOnlyLayout><StatCard /></AdminOnlyLayout>} />
+        <Route path="/admin/revenue-report" element={<AdminOnlyLayout><RevenueReport /></AdminOnlyLayout>} />
+        <Route path="/admin/dashboard" element={<AdminOnlyLayout><AdminDashboard /></AdminOnlyLayout>} />
+        <Route path="/admin/add-course" element={<AddCourse />} />
       </Routes>
     </Router>
   );

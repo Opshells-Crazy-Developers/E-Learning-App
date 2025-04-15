@@ -558,3 +558,5 @@ export const getCourses = async () => {
   ]
   return Promise.resolve(allCourses);
 };
+
+

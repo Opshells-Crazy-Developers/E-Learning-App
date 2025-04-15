@@ -50,6 +50,31 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
+// Add a profile update route
+app.put('/api/profile', async (req, res) => {
+  const { userId, name, email, address, city, state, zipCode, country } = req.body;
+
+  try {
+    const query = `
+      UPDATE users
+      SET name = ?, email = ?, address = ?, city = ?, state = ?, zip_code = ?, country = ?, updated_at = NOW()
+      WHERE id = ?;
+    `;
+    const values = [name, email, address, city, state, zipCode, country, userId];
+    const [result] = await pool.execute(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+
 // Sign In API (POST)
 app.post('/api/signin', (req, res) => {
   const { email, password } = req.body;

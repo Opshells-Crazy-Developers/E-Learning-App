@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, User } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext'; // 👈 import context
+import { useAuth } from '../context/AuthContext'; // Using useAuth custom hook
 import { getCourses } from '../features/courses/courseService';
 
 const Navbar = () => {
   const location = useLocation();
-  const { user, logout } = useContext(AuthContext); // 👈 auth state
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  const { currentUser, logout } = useAuth();  // Using useAuth to access user state
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
@@ -15,7 +16,7 @@ const Navbar = () => {
     const fetchCourses = async () => {
       try {
         const allCourses = await getCourses();
-        const uniqueCategories = [...new Set(allCourses.map(c => c.category))];
+        const uniqueCategories = [...new Set(allCourses.map((c) => c.category))];
         setCategories(uniqueCategories);
       } catch (err) {
         console.error('Failed to fetch courses:', err);
@@ -33,13 +34,22 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
-    ...(user ? [
+    ...(currentUser ? [
       { name: 'Dashboard', path: '/dashboard' },
       { name: 'My Courses', path: '/my-courses' },
       { name: 'Subscriptions', path: '/subscriptions' },
     ] : []),
     { name: 'Contact', path: '/contact' },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -48,6 +58,7 @@ const Navbar = () => {
           Learnity
         </Link>
 
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex gap-6 items-center flex-1 justify-center">
           {navLinks.map((link) => (
             <Link
@@ -79,13 +90,14 @@ const Navbar = () => {
             </button>
           </form>
 
-          {user ? (
+          {/* Auth Section (Login/Logout) */}
+          {currentUser ? (
             <div className="flex items-center gap-3">
               <Link to="/profile" title="Profile">
                 <User className="text-purple-700" />
               </Link>
               <button
-                onClick={logout}
+                onClick={handleLogout} // Update the logout button to call handleLogout
                 className="px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded"
               >
                 Logout
@@ -126,12 +138,12 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          {user ? (
+          {currentUser ? (
             <>
               <Link to="/profile" className="block text-purple-700">Profile</Link>
               <button
                 onClick={() => {
-                  logout();
+                  handleLogout(); // Use handleLogout to log out and redirect
                   setMenuOpen(false);
                 }}
                 className="block text-red-500"

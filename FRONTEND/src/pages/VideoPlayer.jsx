@@ -9,8 +9,15 @@ const courseData = {
     {
       title: "Module 1: Introduction",
       lessons: [
-        { id: 1, title: "Course Overview", duration: "10:15", active: true, videoSrc: "" },
-        { id: 2, title: "Setting Up Your Environment", duration: "15:30", active: false, videoSrc: "" },
+// In your courseData, update at least one video path to a sample video
+// For example, for the first lesson:
+{ 
+  id: 1, 
+  title: "Course Overview", 
+  duration: "10:15", 
+  active: true, 
+  videoSrc: "public/M7T1V1.mp4" // Sample video from W3Schools
+},        { id: 2, title: "Setting Up Your Environment", duration: "15:30", active: false, videoSrc: "" },
         { id: 3, title: "Web Development Fundamentals", duration: "20:45", active: false, videoSrc: "" },
       ]
     },

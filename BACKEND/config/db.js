@@ -1,21 +1,18 @@
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
+const mysql = require("mysql2");
 
-dotenv.config();
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const db = mysql.createConnection({
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASS || "Pranav@1402",
+  database: process.env.DB_NAME || "elearning_app",
 });
 
-connection.connect((err) => {
+db.connect((err) => {
   if (err) {
-    console.error('Database connection failed:', err.stack);
+    console.error("Database connection failed:", err.stack);
     return;
   }
-  console.log('Connected to MySQL database');
+  console.log("Connected to MySQL");
 });
 
-module.exports = connection;
+module.exports = db;

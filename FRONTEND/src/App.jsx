@@ -27,14 +27,13 @@ import VideoCoursePlayer from "./pages/VideoPlayer";
 import AdminLayout from "./Admin/AdminLayout";
 import UserList from "./Admin/UsersList";
 import CourseFormModal from "./features/courses/CourseFormModal";
-import StatCard from "./components/Analytics/StatCard";
-import RevenueReport from "./components/Analytics/RevenueReport";
 import AdminDashboard from "./Admin/AdminDashboard";
 import TestQuiz from "./pages/TestQuiz";
 import AdminNavbar from "./Admin/Navbar";
 import AddCourse from "./Admin/AddCourses";
 import Analytics from "./Admin/Analytics";
 import AdminSettings from "./Admin/AdminSettings";
+import Signup from "./pages/Register";
 
 // Layouts
 const Layout = ({ children }) => (
@@ -74,6 +73,7 @@ const App = () => {
         {/* General Pages */}
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/login" element={<LoginLayout><Login /></LoginLayout>} />
+        <Route path="/signup" element={<LoginLayout><Signup /></LoginLayout>} />
         <Route path="/forgot-password" element={<LoginLayout><ForgotPassword /></LoginLayout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />

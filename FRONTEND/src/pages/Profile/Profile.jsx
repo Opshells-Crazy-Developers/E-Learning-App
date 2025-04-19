@@ -12,8 +12,8 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Sidebar from "../components/Sidebar";
-import { AuthContext } from "../context/AuthContext";
+import Sidebar from "../../components/Sidebar";
+import  {AuthContext}  from "../../context/AuthContext";
 
 const primaryPurple = "#9333ea";
 const hoverPurple = "#7e22ce";

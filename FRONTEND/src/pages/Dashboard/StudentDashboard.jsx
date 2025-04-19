@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import axios from "axios";
 
-const DashboardLayout = ({ children }) => {
+const StudentDashboard = ({ children }) => {
   const [activeTab, setActiveTab] = useState("courses");
   const [courses, setCourses] = useState([]); // State to store courses data
   const [loading, setLoading] = useState(true); // State for loading state
@@ -220,4 +220,4 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default StudentDashboard;
